@@ -26,7 +26,7 @@ This project provides scripts to automate Google and Twitter account management,
 To manage your Google account, run the command:
 
 ```bash
-python main.py google <email> <password> <  > --first_name <first_name> --last_name <last_name> --date_of_birth <date_of_birth> --recovery_email <recovery_email> --user_agent <user_agent>
+python main.py google <email> <password> <new_password> --first_name <first_name> --last_name <last_name> --date_of_birth <date_of_birth> --recovery_email <recovery_email> --user_agent <user_agent>
 ```
 
 
