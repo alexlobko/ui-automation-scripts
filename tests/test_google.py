@@ -2,7 +2,7 @@ import csv
 
 import pytest
 from scripts.google import GoogleAccountManager
-from scripts.utils import generate_random_name, generate_random_password
+from scripts.utils import generate_random_name, generate_random_password, save_account_data
 
 
 def read_account_data(csv_file):
@@ -14,33 +14,27 @@ def read_account_data(csv_file):
     return account_data
 
 
-def update_account_data(csv_file, updated_data):
-    fieldnames = ['email', 'password', 'first_name', 'last_name']
-    with open(csv_file, mode='w', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerow(updated_data)
-
-
 csv_file = 'data/test_google_account_data.csv'
-account_data = read_account_data(csv_file)
-test_email = account_data[0]['email']
-test_password = account_data[0]['password']
+account_data = read_account_data(csv_file)[-1]
+test_email = account_data['email']
+test_password = account_data['password']
+test_first_name = account_data['first_name']
+test_last_name = account_data['last_name']
+test_date_of_birth = account_data['date_of_birth']
+test_recovery_email = account_data['recovery_email']
 
-
-def write_account_data_to_csv(csv_file, new_account_data):
-    fieldnames = ['email', 'password', 'first_name', 'last_name']
-    with open(csv_file, mode='a', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writerow(new_account_data)
 
 
 @pytest.fixture
 def google_account():
     email = test_email
     password = test_password
+    first_name = test_first_name
+    last_name = test_last_name
+    date_of_birth = test_date_of_birth
+    recovery_email = test_recovery_email
     driver_path = "C:/path/to/chromedriver"
-    return GoogleAccountManager(email, password, driver_path)
+    return GoogleAccountManager(email, password, driver_path,first_name, last_name, date_of_birth, recovery_email)
 
 
 def test_login(google_account):
@@ -54,17 +48,18 @@ def test_change_name(google_account):
     google_account.login()
     google_account.change_name(first_name, last_name)
     google_account.quit()
-    account_data[0]['first_name'] = first_name
-    account_data[0]['last_name'] = last_name
-    update_account_data(csv_file, account_data[0])
-
+    account_data['first_name'] = first_name
+    account_data['last_name'] = last_name
+    save_account_data(csv_file, account_data)
+    google_account.update_account_data()
 
 def test_change_password(google_account):
     new_password = generate_random_password()
+    print(new_password)
     google_account.login()
     google_account.change_password(new_password)
     google_account.quit()
-    account_data[0]['password'] = new_password
-    update_account_data(csv_file, account_data[0])
+    account_data['password'] = new_password
+    save_account_data(csv_file, account_data)
 
 

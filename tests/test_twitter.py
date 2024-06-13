@@ -16,7 +16,7 @@ def read_account_data(csv_file):
 
 def update_account_data(csv_file, updated_data):
     fieldnames = ['email', 'password']
-    with open(csv_file, mode='w', newline='') as file:
+    with open(csv_file, mode='a', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerow(updated_data)
@@ -47,9 +47,9 @@ def test_make_random_post(twitter_account):
     twitter_account.quit()
 
 
-
 def test_change_password(twitter_account):
     new_password = generate_random_password()
+    print(new_password)
     twitter_account.login()
     twitter_account.change_password(new_password)
     twitter_account.quit()

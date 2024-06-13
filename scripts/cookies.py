@@ -27,4 +27,5 @@ def save_fingerprint(driver, filename):
 def load_fingerprint(driver, filename):
     with open(filename, 'rb') as f:
         fingerprint = pickle.load(f)
-        driver.execute_cdp_cmd('Network.setUserAgentOverride', {'userAgent': fingerprint['user-agent']})
+
+
